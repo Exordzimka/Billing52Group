@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Billing52Group.Server.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace Billing52Group.Server
 {
@@ -17,9 +21,21 @@ namespace Billing52Group.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRouting(opt => opt.LowercaseUrls = true);
             services.AddControllers();
+
             services.AddDbContext<Billing52GroupContext>(opt =>
                 opt.UseMySql(_configuration[AppConstants.Configuration.ConnectionString]));
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo {Title = "Billing52Group API", Version = "v1"});
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                opt.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,7 +46,13 @@ namespace Billing52Group.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+                opt.RoutePrefix = "swagger";
+            });
 
             app.UseRouting();
 
