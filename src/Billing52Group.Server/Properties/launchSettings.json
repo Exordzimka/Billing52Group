@@ -1,0 +1,20 @@
+﻿{
+  "profiles": {
+    "DEV": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5005/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_APPLICATION_NAME": "fm-builds-parser-service"
+      }
+    },
+    "PROD": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_APPLICATION_NAME": "fm-builds-parser-service"
+      }
+    }
+  }
+}
