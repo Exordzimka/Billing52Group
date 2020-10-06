@@ -2,9 +2,10 @@
 
 namespace Billing52Group.Server.Controllers.V1
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
-    [Route("api/v1")]
-    public class V1ControllerBase : Controller
+    [Area("api/v1")]
+    public class V1ControllerBase : ControllerBase
     {
     }
 }
