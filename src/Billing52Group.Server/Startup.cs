@@ -1,31 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Billing52Group.Server.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Billing52Group.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        readonly IConfiguration _configuration;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration) => _configuration = configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<Billing52GroupContext>(opt =>
+                opt.UseMySql(_configuration[AppConstants.Configuration.ConnectionString]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
