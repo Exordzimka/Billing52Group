@@ -5,20 +5,6 @@ namespace Billing52Group.Server.Models
 {
     public class Contract
     {
-        public Contract()
-        {
-            Contractaccount = new HashSet<ContractAccount>();
-            Contractbalance = new HashSet<ContractBalance>();
-            Contractcharge = new HashSet<ContractCharge>();
-            Contractlimit = new HashSet<ContractLimit>();
-            Contractmodule = new HashSet<ContractModule>();
-            Contractparams = new HashSet<ContractParams>();
-            Contractpayment = new HashSet<ContractPayment>();
-            Contractservice = new HashSet<ContractService>();
-            Contractstatus = new HashSet<ContractStatus>();
-            Contracttariff = new HashSet<ContractTariff>();
-        }
-
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -35,24 +21,24 @@ namespace Billing52Group.Server.Models
 
         public virtual ContractGroup ContractGroup { get; set; }
 
-        public virtual ICollection<ContractAccount> Contractaccount { get; set; }
+        public virtual ICollection<ContractAccount> ContractAccounts { get; set; } = new List<ContractAccount>();
 
-        public virtual ICollection<ContractBalance> Contractbalance { get; set; }
+        public virtual ICollection<ContractBalance> ContractBalance { get; set; } = new List<ContractBalance>();
 
-        public virtual ICollection<ContractCharge> Contractcharge { get; set; }
+        public virtual ICollection<ContractCharge> ContractCharge { get; set; } = new List<ContractCharge>();
 
-        public virtual ICollection<ContractLimit> Contractlimit { get; set; }
+        public virtual ICollection<ContractLimit> ContractLimit { get; set; } = new List<ContractLimit>();
 
-        public virtual ICollection<ContractModule> Contractmodule { get; set; }
+        public virtual ICollection<ContractModule> ContractModule { get; set; } = new List<ContractModule>();
 
-        public virtual ICollection<ContractParams> Contractparams { get; set; }
+        public virtual ICollection<ContractParams> ContractParams { get; set; } = new List<ContractParams>();
 
-        public virtual ICollection<ContractPayment> Contractpayment { get; set; }
+        public virtual ICollection<ContractPayment> ContractPayment { get; set; } = new List<ContractPayment>();
 
-        public virtual ICollection<ContractService> Contractservice { get; set; }
+        public virtual ICollection<ContractService> ContractService { get; set; } = new List<ContractService>();
 
-        public virtual ICollection<ContractStatus> Contractstatus { get; set; }
+        public virtual ICollection<ContractStatus> ContractStatus { get; set; } = new List<ContractStatus>();
 
-        public virtual ICollection<ContractTariff> Contracttariff { get; set; }
+        public virtual ICollection<ContractTariff> ContractTariff { get; set; } = new List<ContractTariff>();
     }
 }
