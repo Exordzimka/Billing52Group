@@ -12,12 +12,12 @@ namespace Billing52Group.Server.Controllers.V1
 {
     [Route("[area]/[controller]")]
     [ApiController]
-    public sealed class ContractsController : V1ControllerBase
+    public sealed class ContractsControllerBase : V1ControllerBase
     {
         readonly Billing52GroupContext _context;
-        readonly ILogger<ContractsController> _logger;
+        readonly ILogger<ContractsControllerBase> _logger;
 
-        public ContractsController(Billing52GroupContext context, ILogger<ContractsController> logger)
+        public ContractsControllerBase(Billing52GroupContext context, ILogger<ContractsControllerBase> logger)
         {
             _context = context;
             _logger = logger;
@@ -28,8 +28,8 @@ namespace Billing52Group.Server.Controllers.V1
         /// Вернуть все контракты
         /// </summary>
         /// <returns>Все контракты, зарегистрированные в системе</returns>
-        [Produces("application/json")]
         [HttpGet]
+        [Produces(typeof(IEnumerable<Contract>))]
         public async Task<ActionResult<IEnumerable<Contract>>> GetAll()
         {
             return await _context.Contract.ToListAsync();
@@ -41,6 +41,7 @@ namespace Billing52Group.Server.Controllers.V1
         /// <param name="id">id контракта</param>
         /// <returns>Контракт с заданным id</returns>
         [HttpGet("{id}")]
+        [Produces(typeof(Contract))]
         public async Task<ActionResult<Contract>> Get(int id)
         {
             var contract = await _context.Contract.FindAsync(id);
@@ -58,6 +59,7 @@ namespace Billing52Group.Server.Controllers.V1
         /// <param name="contract"></param>
         /// <returns></returns>
         [HttpPost]
+        [Produces(typeof(Contract))]
         public async Task<ActionResult<Contract>> PostContract(Contract contract)
         {
             await _context.Contract.AddAsync(contract);
@@ -72,6 +74,7 @@ namespace Billing52Group.Server.Controllers.V1
         /// <param name="contract">Обновленный контракт</param>
         /// <returns>Итоговый вариант контракта</returns>
         [HttpPut("{id}")]
+        [Produces(typeof(Contract))]
         public async Task<IActionResult> PutContract(int id, Contract contract)
         {
             // @TODO поменять Contract на другую модель
@@ -95,7 +98,8 @@ namespace Billing52Group.Server.Controllers.V1
 
         // DELETE: api/Contracts/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Contract>> DeleteContract(int id)
+        [Produces(typeof(int))]
+        public async Task<ActionResult<int>> DeleteContract(int id)
         {
             var contract = await _context.Contract.FindAsync(id);
             if (contract is null)

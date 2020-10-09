@@ -16,6 +16,6 @@ namespace Billing52Group.Models.Api.V1
 
         public virtual ModuleViewModel Module { get; set; }
 
-        public virtual ICollection<ContractServiceViewModel> Contractservice { get; set; } = new List<ContractServiceViewModel>();
+        public virtual ICollection<ContractServiceViewModel> ContractService { get; set; } = new List<ContractServiceViewModel>();
     }
 }

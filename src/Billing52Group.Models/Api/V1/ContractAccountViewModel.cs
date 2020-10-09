@@ -6,7 +6,7 @@
 
         public bool Mm { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
         public double Summa { get; set; }
 

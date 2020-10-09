@@ -8,7 +8,7 @@
 
         public double Summa { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
         public virtual ContractViewModel Contract { get; set; }
     }

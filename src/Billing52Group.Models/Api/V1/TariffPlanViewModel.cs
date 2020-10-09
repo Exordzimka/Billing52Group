@@ -8,12 +8,12 @@ namespace Billing52Group.Models.Api.V1
 
         public string Title { get; set; }
 
-        public int? Tariffgroupid { get; set; }
+        public int? TariffGroupId { get; set; }
 
         public double? Cost { get; set; }
 
         public virtual TariffGroupViewModel TariffGroup { get; set; }
 
-        public virtual ICollection<ContractTariffViewModel> Contracttariff { get; set; } = new List<ContractTariffViewModel>();
+        public virtual ICollection<ContractTariffViewModel> ContractTariff { get; set; } = new List<ContractTariffViewModel>();
     }
 }

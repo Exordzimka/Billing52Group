@@ -17,7 +17,7 @@ namespace Billing52Group.Models.Api.V1
 
         public string Comment { get; set; }
 
-        public int? Contractgroupid { get; set; }
+        public int? ContractGroupId { get; set; }
 
         public virtual ContractGroupViewModel ContractGroup { get; set; }
 

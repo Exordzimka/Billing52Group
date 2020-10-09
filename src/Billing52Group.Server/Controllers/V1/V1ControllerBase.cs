@@ -5,7 +5,7 @@ namespace Billing52Group.Server.Controllers.V1
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     [Area("api/v1")]
-    public class V1ControllerBase : ControllerBase
+    public abstract class V1ControllerBase : ControllerBase
     {
     }
 }

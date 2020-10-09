@@ -5,6 +5,8 @@
         public static class Configuration
         {
             public const string ConnectionString = "ConnectionStrings:DatabaseConnectionString";
+
+            public const string ApplicationUrls = "ApplicationUrls";
         }
     }
 }

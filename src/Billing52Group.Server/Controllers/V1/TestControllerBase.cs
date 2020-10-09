@@ -6,7 +6,7 @@ namespace Billing52Group.Server.Controllers.V1
 {
     [ApiController]
     [Route("[area]/[controller]")]
-    public class TestController : V1ControllerBase
+    public class TestControllerBase : V1ControllerBase
     {
         /// <summary>
         ///     Get { "Ok": "Google" }
