@@ -19,7 +19,6 @@ namespace Billing52Group.Server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://0.0.0.0:4343");
                 });
     }
 }

@@ -118,7 +118,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractaccount)
+                    .WithMany(p => p.ContractAccounts)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract7");
@@ -144,7 +144,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractbalance)
+                    .WithMany(p => p.ContractBalance)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract3");
@@ -174,7 +174,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractcharge)
+                    .WithMany(p => p.ContractCharge)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract2");
@@ -223,7 +223,7 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnType("date");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractlimit)
+                    .WithMany(p => p.ContractLimit)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract9");
@@ -251,7 +251,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Moduleid).HasColumnName("moduleid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractmodule)
+                    .WithMany(p => p.ContractModule)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract1");
@@ -287,7 +287,7 @@ namespace Billing52Group.Server.Configuration
                     .HasCollation("latin1_swedish_ci");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractparams)
+                    .WithMany(p => p.ContractParams)
                     .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract10");
@@ -324,7 +324,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractpayment)
+                    .WithMany(p => p.ContractPayment)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract4");
@@ -367,7 +367,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Serviceid).HasColumnName("serviceid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractservice)
+                    .WithMany(p => p.ContractService)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract6");
@@ -402,7 +402,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Statusid).HasColumnName("statusid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractstatus)
+                    .WithMany(p => p.ContractStatus)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract8");
@@ -445,7 +445,7 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Tariffplanid).HasColumnName("tariffplanid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contracttariff)
+                    .WithMany(p => p.ContractTariff)
                     .HasForeignKey(d => d.Contractid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract5");
