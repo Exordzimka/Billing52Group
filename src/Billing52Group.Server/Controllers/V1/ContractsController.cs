@@ -12,12 +12,12 @@ namespace Billing52Group.Server.Controllers.V1
 {
     [Route("[area]/[controller]")]
     [ApiController]
-    public sealed class ContractsControllerBase : V1ControllerBase
+    public sealed class ContractsController : V1ControllerBase
     {
         readonly Billing52GroupContext _context;
-        readonly ILogger<ContractsControllerBase> _logger;
+        readonly ILogger<ContractsController> _logger;
 
-        public ContractsControllerBase(Billing52GroupContext context, ILogger<ContractsControllerBase> logger)
+        public ContractsController(Billing52GroupContext context, ILogger<ContractsController> logger)
         {
             _context = context;
             _logger = logger;

@@ -26,7 +26,7 @@ namespace Billing52Group.Server
             services.AddControllers();
 
             services.AddDbContext<Billing52GroupContext>(opt =>
-                opt.UseMySql(_configuration[AppConstants.Configuration.ConnectionString]));
+                opt.UseMySql(_configuration[AppConstants.Configurations.ConnectionString]));
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(opt =>
