@@ -1,4 +1,6 @@
-﻿namespace Billing52Group.Models.Api.V1
+﻿using Newtonsoft.Json;
+
+namespace Billing52Group.Models.Api.V1
 {
     public class ContractAccountViewModel
     {
@@ -10,6 +12,7 @@
 
         public double Summa { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ContractViewModel Contract { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace Billing52Group.Models.Api.V1
         public string Limit1 { get; set; }
 
         public virtual ICollection<ContractLimitViewModel> ContractLimit { get; set; } = new List<ContractLimitViewModel>();
+
+        public bool ShouldSerializeContractLimit() => ContractLimit.Count > 0;
     }
 }

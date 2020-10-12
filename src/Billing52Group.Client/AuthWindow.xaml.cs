@@ -11,9 +11,9 @@ namespace Billing52Group.Client
             InitializeComponent();
         }
 
-        private async void Auth_Click(object sender, RoutedEventArgs e)
+        private void Auth_Click(object sender, RoutedEventArgs e)
         {
-            var result = new BillingApiV1HttpService();
+            // var result = new BillingApiV1HttpService();
 
             // try
             // {

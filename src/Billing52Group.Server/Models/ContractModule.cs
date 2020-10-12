@@ -2,7 +2,7 @@
 {
     public class ContractModule
     {
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
         public int Moduleid { get; set; }
 

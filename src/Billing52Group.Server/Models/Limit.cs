@@ -10,6 +10,6 @@ namespace Billing52Group.Server.Models
 
         public string Limit1 { get; set; }
 
-        public virtual ICollection<ContractLimit> Contractlimit { get; set; } = new List<ContractLimit>();
+        public virtual ICollection<ContractLimit> ContractLimit { get; set; } = new List<ContractLimit>();
     }
 }

@@ -9,5 +9,7 @@ namespace Billing52Group.Models.Api.V1
         public string Title { get; set; }
 
         public virtual ICollection<TariffPlanViewModel> TariffPlan { get; set; } = new List<TariffPlanViewModel>();
+
+        public bool ShouldSerializeTariffPlan() => TariffPlan.Count > 0;
     }
 }

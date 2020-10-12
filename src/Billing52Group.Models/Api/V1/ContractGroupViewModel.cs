@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Billing52Group.Models.Api.V1
 {
@@ -10,6 +11,7 @@ namespace Billing52Group.Models.Api.V1
 
         public string Comment { get; set; }
 
-        public virtual ICollection<ContractViewModel> Contracts { get; set; } = new List<ContractViewModel>();
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual ICollection<ContractViewModel> Contracts { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Billing52Group.Server.Models
 
         public string Title { get; set; }
 
-        public virtual ICollection<TariffPlan> Tariffplan { get; set; } = new List<TariffPlan>();
+        public virtual ICollection<TariffPlan> TariffPlan { get; set; } = new List<TariffPlan>();
     }
 }

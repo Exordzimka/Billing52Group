@@ -12,9 +12,9 @@ namespace Billing52Group.Server.Models
 
         public string Comment { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
-        public int Tariffplanid { get; set; }
+        public int TariffPlanId { get; set; }
 
         public virtual Contract Contract { get; set; }
 

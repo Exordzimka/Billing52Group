@@ -1,5 +1,6 @@
 using AutoMapper;
 using Billing52Group.Server.Configuration;
+using Billing52Group.Server.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using MySql.Data.MySqlClient;
 
 namespace Billing52Group.Server
 {
@@ -23,10 +25,15 @@ namespace Billing52Group.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRouting(opt => opt.LowercaseUrls = true);
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.UseCamelCasing(true);
+                });
 
             services.AddDbContext<Billing52GroupContext>(opt =>
-                opt.UseMySql(_configuration[AppConstants.Configurations.ConnectionString]));
+                opt.UseMySql(GetValidatedConnectionString()));
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(opt =>
@@ -59,12 +66,19 @@ namespace Billing52Group.Server
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+        }
+
+        string GetValidatedConnectionString()
+        {
+            var connectionString = _configuration[AppConstants.Configurations.ConnectionString];
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new MissingConfigurationMemberException(AppConstants.Configurations.ConnectionString);
+
+            return connectionString;
         }
     }
 }

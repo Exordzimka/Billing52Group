@@ -9,5 +9,7 @@ namespace Billing52Group.Models.Api.V1
         public string Title { get; set; }
 
         public virtual ICollection<ContractParamsViewModel> ContractParams { get; set; } = new List<ContractParamsViewModel>();
+
+        public bool ShouldSerializeContractParams() => ContractParams.Count > 0;
     }
 }

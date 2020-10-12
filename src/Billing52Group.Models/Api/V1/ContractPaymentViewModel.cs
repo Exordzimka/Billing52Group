@@ -1,4 +1,6 @@
-﻿namespace Billing52Group.Models.Api.V1
+﻿using Newtonsoft.Json;
+
+namespace Billing52Group.Models.Api.V1
 {
     public class ContractPaymentViewModel
     {
@@ -8,12 +10,14 @@
 
         public string Comment { get; set; }
 
-        public int Paymentid { get; set; }
+        public int PaymentId { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ContractViewModel Contract { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual PaymentViewModel Payment { get; set; }
     }
 }
