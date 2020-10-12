@@ -6,9 +6,9 @@ namespace Billing52Group.Server.Models
     {
         public int Id { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
-        public int Statusid { get; set; }
+        public int StatusId { get; set; }
 
         public DateTime Startdate { get; set; }
 

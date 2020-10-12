@@ -10,7 +10,7 @@ namespace Billing52Group.Server.Models
 
         public string Comment { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
         public DateTime Date { get; set; }
 

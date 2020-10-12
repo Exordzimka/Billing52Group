@@ -17,7 +17,7 @@ namespace Billing52Group.Server.Models
 
         public string Comment { get; set; }
 
-        public int? Contractgroupid { get; set; }
+        public int? ContractGroupId { get; set; }
 
         public virtual ContractGroup ContractGroup { get; set; }
 

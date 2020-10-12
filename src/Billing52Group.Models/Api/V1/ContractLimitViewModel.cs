@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Billing52Group.Models.Api.V1
 {
@@ -12,8 +13,10 @@ namespace Billing52Group.Models.Api.V1
 
         public DateTime StartDate { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ContractViewModel Contract { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual LimitViewModel Limit { get; set; }
     }
 }

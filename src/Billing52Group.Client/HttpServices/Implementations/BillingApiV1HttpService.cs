@@ -10,7 +10,7 @@ namespace Billing52Group.Client.HttpServices.Implementations
 {
     public sealed class BillingApiV1HttpService : BillingApiHttpServiceBase
     {
-        const string _developBaseAddress = "https://localhost:4341/api/v1/";
+        const string _developBaseAddress = "https://billing52group.azurewebsites.net/api/v1/";
 
         public override Task<IEnumerable<ContractViewModel>> GetContracts()
         {

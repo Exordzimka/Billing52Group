@@ -6,7 +6,7 @@ namespace Billing52Group.Server.Models
     {
         public int Id { get; set; }
 
-        public int Contractid { get; set; }
+        public int ContractId { get; set; }
 
         public int Limitid { get; set; }
 

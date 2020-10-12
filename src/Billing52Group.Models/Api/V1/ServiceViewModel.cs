@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Billing52Group.Models.Api.V1
 {
@@ -14,8 +15,11 @@ namespace Billing52Group.Models.Api.V1
 
         public int Moduleid { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ModuleViewModel Module { get; set; }
 
         public virtual ICollection<ContractServiceViewModel> ContractService { get; set; } = new List<ContractServiceViewModel>();
+
+        public bool ShouldSerializeContractService() => ContractService.Count > 0;
     }
 }

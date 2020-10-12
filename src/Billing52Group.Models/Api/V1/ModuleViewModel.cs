@@ -8,8 +8,12 @@ namespace Billing52Group.Models.Api.V1
 
         public string Title { get; set; }
 
-        public virtual ICollection<ContractModuleViewModel> Contractmodule { get; set; } = new List<ContractModuleViewModel>();
+        public virtual ICollection<ContractModuleViewModel> ContractModule { get; set; } = new List<ContractModuleViewModel>();
+
+        public bool ShouldSerializeContractModule() => ContractModule.Count > 0;
 
         public virtual ICollection<ServiceViewModel> Service { get; set; } = new List<ServiceViewModel>();
+
+        public bool ShouldSerializeService() => Service.Count > 0;
     }
 }
