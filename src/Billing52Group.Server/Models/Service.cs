@@ -4,8 +4,6 @@ namespace Billing52Group.Server.Models
 {
     public class Service
     {
-        public Service() => Contractservice = new HashSet<ContractService>();
-
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -18,6 +16,6 @@ namespace Billing52Group.Server.Models
 
         public virtual Module Module { get; set; }
 
-        public virtual ICollection<ContractService> Contractservice { get; set; }
+        public virtual ICollection<ContractService> ContractService { get; set; } = new HashSet<ContractService>();
     }
 }

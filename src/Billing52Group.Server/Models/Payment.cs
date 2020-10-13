@@ -5,7 +5,7 @@ namespace Billing52Group.Server.Models
 {
     public class Payment
     {
-        public Payment() => Contractpayment = new HashSet<ContractPayment>();
+        public Payment() => ContractPayment = new HashSet<ContractPayment>();
 
         public int Id { get; set; }
 
@@ -13,6 +13,6 @@ namespace Billing52Group.Server.Models
 
         public string Title { get; set; }
 
-        public virtual ICollection<ContractPayment> Contractpayment { get; set; }
+        public virtual ICollection<ContractPayment> ContractPayment { get; set; }
     }
 }

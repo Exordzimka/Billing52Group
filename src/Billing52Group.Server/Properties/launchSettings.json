@@ -1,19 +1,21 @@
-﻿{
+{
   "profiles": {
     "DEV": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5005/swagger",
+      "launchUrl": "https://localhost:4341/swagger",
       "environmentVariables": {
+        "ASPNETCORE_APPLICATION_NAME": "Billing52Group",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_APPLICATION_NAME": "fm-builds-parser-service"
+        "ASPNETCORE_URLS": "http://0.0.0.0:4340;https://0.0.0.0:4341"
       }
     },
     "PROD": {
       "commandName": "Project",
       "environmentVariables": {
+        "ASPNETCORE_APPLICATION_NAME": "Billing52Group",
         "ASPNETCORE_ENVIRONMENT": "Production",
-        "ASPNETCORE_APPLICATION_NAME": "fm-builds-parser-service"
+        "ASPNETCORE_URLS": "http://0.0.0.0:80;https://0.0.0.0:443"
       }
     }
   }

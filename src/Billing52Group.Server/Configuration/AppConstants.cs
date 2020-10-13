@@ -2,7 +2,7 @@
 {
     public static class AppConstants
     {
-        public static class Configuration
+        public static class Configurations
         {
             public const string ConnectionString = "ConnectionStrings:DatabaseConnectionString";
         }

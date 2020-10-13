@@ -63,7 +63,7 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contract");
 
-                entity.HasIndex(e => e.Contractgroupid)
+                entity.HasIndex(e => e.ContractGroupId)
                     .HasName("FKgroup1_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -74,7 +74,7 @@ namespace Billing52Group.Server.Configuration
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.Property(e => e.Contractgroupid).HasColumnName("contractgroupid");
+                entity.Property(e => e.ContractGroupId).HasColumnName("contractgroupid");
 
                 entity.Property(e => e.Date1)
                     .HasColumnName("date1")
@@ -94,58 +94,58 @@ namespace Billing52Group.Server.Configuration
 
                 entity.HasOne(d => d.ContractGroup)
                     .WithMany(p => p.Contract)
-                    .HasForeignKey(d => d.Contractgroupid)
+                    .HasForeignKey(d => d.ContractGroupId)
                     .HasConstraintName("FKgroup1");
             });
 
             modelBuilder.Entity<ContractAccount>(entity =>
             {
-                entity.HasKey(e => new {e.Yy, e.Mm, e.Contractid})
+                entity.HasKey(e => new {e.Yy, e.Mm, Contractid = e.ContractId})
                     .HasName("PRIMARY")
                     .HasAnnotation("MySql:IndexPrefixLength", new[] {0, 0, 0});
 
                 entity.ToTable("contractaccount");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract7_idx");
 
                 entity.Property(e => e.Yy).HasColumnName("yy");
 
                 entity.Property(e => e.Mm).HasColumnName("mm");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractaccount)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractAccounts)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract7");
             });
 
             modelBuilder.Entity<ContractBalance>(entity =>
             {
-                entity.HasKey(e => new {e.Yy, e.Mm, e.Contractid})
+                entity.HasKey(e => new {e.Yy, e.Mm, Contractid = e.ContractId})
                     .HasName("PRIMARY")
                     .HasAnnotation("MySql:IndexPrefixLength", new[] {0, 0, 0});
 
                 entity.ToTable("contractbalance");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract3_idx");
 
                 entity.Property(e => e.Yy).HasColumnName("yy");
 
                 entity.Property(e => e.Mm).HasColumnName("mm");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractbalance)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractBalance)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract3");
             });
@@ -154,7 +154,7 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contractcharge");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract2_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -165,7 +165,7 @@ namespace Billing52Group.Server.Configuration
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -174,8 +174,8 @@ namespace Billing52Group.Server.Configuration
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractcharge)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractCharge)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract2");
             });
@@ -204,7 +204,7 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contractlimit");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract9_idx");
 
                 entity.HasIndex(e => e.Limitid)
@@ -214,7 +214,7 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnName("id")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Limitid).HasColumnName("limitid");
 
@@ -223,13 +223,13 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnType("date");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractlimit)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractLimit)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract9");
 
                 entity.HasOne(d => d.Limit)
-                    .WithMany(p => p.Contractlimit)
+                    .WithMany(p => p.ContractLimit)
                     .HasForeignKey(d => d.Limitid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKlimit1");
@@ -237,7 +237,7 @@ namespace Billing52Group.Server.Configuration
 
             modelBuilder.Entity<ContractModule>(entity =>
             {
-                entity.HasKey(e => new {e.Contractid, e.Moduleid})
+                entity.HasKey(e => new {Contractid = e.ContractId, e.Moduleid})
                     .HasName("PRIMARY")
                     .HasAnnotation("MySql:IndexPrefixLength", new[] {0, 0});
 
@@ -246,18 +246,18 @@ namespace Billing52Group.Server.Configuration
                 entity.HasIndex(e => e.Moduleid)
                     .HasName("FKmodule1_idx");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Moduleid).HasColumnName("moduleid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractmodule)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractModule)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract1");
 
                 entity.HasOne(d => d.Module)
-                    .WithMany(p => p.Contractmodule)
+                    .WithMany(p => p.ContractModule)
                     .HasForeignKey(d => d.Moduleid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKmodule2");
@@ -287,13 +287,13 @@ namespace Billing52Group.Server.Configuration
                     .HasCollation("latin1_swedish_ci");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractparams)
+                    .WithMany(p => p.ContractParams)
                     .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract10");
 
                 entity.HasOne(d => d.Param)
-                    .WithMany(p => p.Contractparams)
+                    .WithMany(p => p.ContractParams)
                     .HasForeignKey(d => d.ParamId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKparams1");
@@ -303,10 +303,10 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contractpayment");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract4_idx");
 
-                entity.HasIndex(e => e.Paymentid)
+                entity.HasIndex(e => e.PaymentId)
                     .HasName("FKpayment1_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -317,21 +317,21 @@ namespace Billing52Group.Server.Configuration
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
-                entity.Property(e => e.Paymentid).HasColumnName("paymentid");
+                entity.Property(e => e.PaymentId).HasColumnName("paymentid");
 
                 entity.Property(e => e.Summa).HasColumnName("summa");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractpayment)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractPayment)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract4");
 
                 entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Contractpayment)
-                    .HasForeignKey(d => d.Paymentid)
+                    .WithMany(p => p.ContractPayment)
+                    .HasForeignKey(d => d.PaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKpayment1");
             });
@@ -340,10 +340,10 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contractservice");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract6_idx");
 
-                entity.HasIndex(e => e.Serviceid)
+                entity.HasIndex(e => e.ServiceId)
                     .HasName("FKservice1_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -354,7 +354,7 @@ namespace Billing52Group.Server.Configuration
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Date1)
                     .HasColumnName("date1")
@@ -364,17 +364,17 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnName("date2")
                     .HasColumnType("date");
 
-                entity.Property(e => e.Serviceid).HasColumnName("serviceid");
+                entity.Property(e => e.ServiceId).HasColumnName("serviceid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractservice)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractService)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract6");
 
                 entity.HasOne(d => d.Service)
-                    .WithMany(p => p.Contractservice)
-                    .HasForeignKey(d => d.Serviceid)
+                    .WithMany(p => p.ContractService)
+                    .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKservice1");
             });
@@ -383,33 +383,33 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contractstatus");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract8_idx");
 
-                entity.HasIndex(e => e.Statusid)
+                entity.HasIndex(e => e.StatusId)
                     .HasName("FKstatus1_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Startdate)
                     .HasColumnName("startdate")
                     .HasColumnType("date");
 
-                entity.Property(e => e.Statusid).HasColumnName("statusid");
+                entity.Property(e => e.StatusId).HasColumnName("statusid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contractstatus)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractStatus)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract8");
 
                 entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Contractstatus)
-                    .HasForeignKey(d => d.Statusid)
+                    .WithMany(p => p.ContractStatus)
+                    .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKstatus1");
             });
@@ -418,10 +418,10 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("contracttariff");
 
-                entity.HasIndex(e => e.Contractid)
+                entity.HasIndex(e => e.ContractId)
                     .HasName("FKcontract5_idx");
 
-                entity.HasIndex(e => e.Tariffplanid)
+                entity.HasIndex(e => e.TariffPlanId)
                     .HasName("FKtariff1_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -432,7 +432,7 @@ namespace Billing52Group.Server.Configuration
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.Property(e => e.Contractid).HasColumnName("contractid");
+                entity.Property(e => e.ContractId).HasColumnName("contractid");
 
                 entity.Property(e => e.Date1)
                     .HasColumnName("date1")
@@ -442,17 +442,17 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnName("date2")
                     .HasColumnType("date");
 
-                entity.Property(e => e.Tariffplanid).HasColumnName("tariffplanid");
+                entity.Property(e => e.TariffPlanId).HasColumnName("tariffplanid");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.Contracttariff)
-                    .HasForeignKey(d => d.Contractid)
+                    .WithMany(p => p.ContractTariff)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract5");
 
                 entity.HasOne(d => d.TariffPlan)
-                    .WithMany(p => p.Contracttariff)
-                    .HasForeignKey(d => d.Tariffplanid)
+                    .WithMany(p => p.ContractTariff)
+                    .HasForeignKey(d => d.TariffPlanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKtariff1");
             });
@@ -590,7 +590,7 @@ namespace Billing52Group.Server.Configuration
             {
                 entity.ToTable("tariffplan");
 
-                entity.HasIndex(e => e.Tariffgroupid)
+                entity.HasIndex(e => e.TariffGroupId)
                     .HasName("FKmodule1_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -599,7 +599,7 @@ namespace Billing52Group.Server.Configuration
                     .HasColumnName("cost")
                     .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Tariffgroupid)
+                entity.Property(e => e.TariffGroupId)
                     .HasColumnName("tariffgroupid")
                     .HasDefaultValueSql("'0'");
 
@@ -611,8 +611,8 @@ namespace Billing52Group.Server.Configuration
                     .HasCollation("latin1_swedish_ci");
 
                 entity.HasOne(d => d.TariffGroup)
-                    .WithMany(p => p.Tariffplan)
-                    .HasForeignKey(d => d.Tariffgroupid)
+                    .WithMany(p => p.TariffPlan)
+                    .HasForeignKey(d => d.TariffGroupId)
                     .HasConstraintName("FKmodule1");
             });
 
