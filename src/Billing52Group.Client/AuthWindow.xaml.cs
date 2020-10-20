@@ -1,5 +1,3 @@
-using Billing52Group.Client.HttpServices.Implementations;
-using System;
 using System.Windows;
 
 namespace Billing52Group.Client
@@ -14,7 +12,7 @@ namespace Billing52Group.Client
         private void Auth_Click(object sender, RoutedEventArgs e)
         {
             // var result = new BillingApiV1HttpService();
-
+            //
             // try
             // {
             //     var contracts = await result.GetContracts();
