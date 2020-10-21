@@ -42,9 +42,9 @@ namespace Billing52Group.Migrations
                         .HasColumnName("date2")
                         .HasColumnType("date");
 
-                    b.Property<sbyte>("Fc")
+                    b.Property<int>("Fc")
                         .HasColumnName("fc")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnName("title")

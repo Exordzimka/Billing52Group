@@ -13,7 +13,7 @@ namespace Billing52Group.Models
 
         public DateTime? Date2 { get; set; }
 
-        public sbyte Fc { get; set; }
+        public int Fc { get; set; }
 
         public string Comment { get; set; }
 

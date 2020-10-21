@@ -1,5 +1,5 @@
 using AutoMapper;
-using Billing52Group.Server;
+using Billing52Group;
 using Xunit;
 
 namespace Billing52Group.Tests
