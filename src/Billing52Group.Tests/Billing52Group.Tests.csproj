@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Billing52Group.Server\Billing52Group.Server.csproj" />
+    <ProjectReference Include="..\Billing52Group\Billing52Group.csproj" />
   </ItemGroup>
 
 </Project>
