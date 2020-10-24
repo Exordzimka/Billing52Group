@@ -1,0 +1,68 @@
+﻿@page "/contracts"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+
+<h3>
+    Contracts
+</h3>
+
+<div class="row justify-content-end">
+    <NavLink class="text-white" href="/contracts/create">
+        <span class="btn btn-primary">
+            Create
+        </span>
+    </NavLink>
+</div>
+
+@if (contracts == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr class="table-">
+                <th>
+                    Id
+                </th>
+                <th>
+                    Comment
+                </th>
+                <th>
+                    Title
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                @foreach (var contract in contracts)
+                {
+                    <td>
+                        @contract.Id
+                    </td>
+                    <td>
+                        @contract.Comment
+                    </td>
+                    <td>
+                        @contract.Title
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<Contract> contracts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        contracts = await Context.Contract.ToListAsync();
+    }
+}

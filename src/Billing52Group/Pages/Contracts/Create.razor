@@ -1,0 +1,59 @@
+﻿@page "/contracts/create"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+
+<h3>Create</h3>
+<div class="d-flex justify-content-center">
+    <EditForm OnSubmit="@CreateContract" Model="@Contract" class="form-group d-flex flex-column col-sm-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <label>
+            Title
+            <InputText @bind-Value="Contract.Title" class="form-control" />
+        </label>
+
+        <label>
+            Comment
+            <InputText @bind-Value="Contract.Comment" class="form-control" />
+        </label>
+
+        <label>
+            Date1
+            <InputDate @bind-Value="Contract.Date1" class="form-control" />
+        </label>
+
+        <label>
+            Date2
+            <InputDate @bind-Value="Contract.Date2" class="form-control" />
+        </label>
+
+        <label>
+            Fc
+            <InputNumber @bind-Value="Contract.Fc" class="form-control" />
+        </label>
+
+        <label>
+            Contract group id
+            <InputNumber @bind-Value="Contract.ContractGroupId" class="form-control" />
+        </label>
+
+        <input type="submit" class="form-control" />
+
+    </EditForm>
+</div>
+
+@code {
+
+    readonly Contract Contract = new Contract{ Date1 = DateTime.UtcNow, Date2 = DateTime.UtcNow };
+
+    async Task CreateContract(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+
+        await Context.Contract.AddAsync(Contract);
+    }
+
+}
