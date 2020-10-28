@@ -4,15 +4,25 @@
 @using Billing52Group.Models
 @inject ApplicationDbContext Context
 @attribute [Authorize]
-
+@layout MainLayout
 <h3>
     Contracts
 </h3>
 
 <div class="row justify-content-end">
     <NavLink class="text-white" href="/contracts/create">
-        <span class="btn btn-primary">
+        <span class="btn btn-primary" >
             Create
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contracts/edit">
+        <span class="btn btn-primary" >
+            Edit
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contracts/delete">
+        <span class="btn btn-primary" >
+            Delete
         </span>
     </NavLink>
 </div>

@@ -1,0 +1,90 @@
+﻿@page "/services"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout MainLayout
+<h3>
+    Services
+</h3>
+
+<div class="row justify-content-end">
+    <NavLink class="text-white" href="/contractGroup/create">
+        <span class="btn btn-primary" >
+            Create
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/edit">
+        <span class="btn btn-primary" >
+            Edit
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/delete">
+        <span class="btn btn-primary" >
+            Delete
+        </span>
+    </NavLink>
+</div>
+
+@if (services == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr class="table-">
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Cost
+            </th>
+            <th>
+                Module Id
+            </th>
+            <th>
+                Comment
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            @foreach (var service in services)
+            {
+                <td>
+                    @service.Id
+                </td>
+                <td>
+                    @service.Title
+                </td>
+                <td>
+                    @service.Cost
+                </td>
+                <td>
+                    @service.Moduleid
+                </td>
+                <td>
+                    @service.Comment
+                </td>
+            }
+        </tr>
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<Service> services;
+
+    protected override async Task OnInitializedAsync()
+    {
+        services = await Context.Service.ToListAsync();
+    }
+}

@@ -1,0 +1,78 @@
+﻿@page "/statuses"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout MainLayout
+<h3>
+    Statuses
+</h3>
+
+<div class="row justify-content-end">
+    <NavLink class="text-white" href="/contractGroup/create">
+        <span class="btn btn-primary" >
+            Create
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/edit">
+        <span class="btn btn-primary" >
+            Edit
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/delete">
+        <span class="btn btn-primary" >
+            Delete
+        </span>
+    </NavLink>
+</div>
+
+@if (statuses == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr class="table-">
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Comment
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            @foreach (var statuse in statuses)
+            {
+                <td>
+                    @statuse.Id
+                </td>
+                <td>
+                    @statuse.Title
+                </td>
+                <td>
+                    @statuse.Comment
+                </td>
+            }
+        </tr>
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<Status> statuses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statuses = await Context.Status.ToListAsync();
+    }
+}

@@ -52,8 +52,8 @@
     async Task CreateContract(EditContext editContext)
     {
         if (!editContext.Validate()) return;
-
-        await Context.Contract.AddAsync(Contract);
+        await Context.AddAsync(Contract);
+        await Context.SaveChangesAsync();
     }
 
 }
