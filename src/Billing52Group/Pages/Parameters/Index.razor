@@ -1,0 +1,72 @@
+﻿@page "/parameters"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout MainLayout
+<h3>
+    Parameters
+</h3>
+
+<div class="row justify-content-end">
+    <NavLink class="text-white" href="/contractGroup/create">
+        <span class="btn btn-primary" >
+            Create
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/edit">
+        <span class="btn btn-primary" >
+            Edit
+        </span>
+    </NavLink>
+    <NavLink class="text-white" href="/contractGroup/delete">
+        <span class="btn btn-primary" >
+            Delete
+        </span>
+    </NavLink>
+</div>
+
+@if (parameters == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr class="table-">
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            @foreach (var parameter in parameters)
+            {
+                <td>
+                    @parameter.Id
+                </td>
+                <td>
+                    @parameter.Title
+                </td>
+            }
+        </tr>
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<Parameters> parameters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        parameters = await Context.Parameters.ToListAsync();
+    }
+}
