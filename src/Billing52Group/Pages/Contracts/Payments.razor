@@ -1,0 +1,67 @@
+﻿@page "/contracts/{Id:int}/payments"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout Form
+@inject IJSRuntime JsRuntime
+
+@if (_contractPayments != null)
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Sum
+            </th>
+            <th>
+                Comment
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractPayment in _contractPayments)
+        {
+            <tr>
+                <td>
+                    @contractPayment.Id
+                </td>
+                <td>
+                    @contractPayment.Summa
+                </td>
+                <td contenteditable="true">
+                    @contractPayment.Comment
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+    
+    IEnumerable<ContractPayment> _contractPayments;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractPayments = await Context.ContractPayment.Where(payment => payment.ContractId == Id).ToListAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ChangeComment(int contractPaymentId,string changedComment)
+    {
+        Context.ContractPayment.FirstOrDefault(contractPayment => contractPayment.Id == contractPaymentId).Comment = changedComment;
+    }
+    
+}

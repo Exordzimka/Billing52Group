@@ -1,0 +1,66 @@
+@page "/contracts/{Id:int}"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using System.Collections
+@inject ApplicationDbContext Context
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+@layout MainLayout
+@attribute [Authorize]
+
+
+
+
+@if (Contract != null)
+{
+    <h1>@TitleOfPage</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light text-black-50">
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/parameters">Parameters</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/modules">Modules</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/services">Services</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/payments">Payments</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/charges">Charges</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/tariffs">Tariffs</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    @Body
+}
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    public Contract Contract{ get; set; }
+    public string TitleOfPage{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Contract ??= await Context.Contract.FirstOrDefaultAsync(contract => contract.Id == Id);
+        TitleOfPage = Contract.Id + " " + Contract.Title;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        await JsRuntime.InvokeVoidAsync("setTitle", TitleOfPage);
+    }
+}

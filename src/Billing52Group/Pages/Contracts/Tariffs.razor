@@ -1,0 +1,29 @@
+﻿@page "/contracts/{Id:int}/tariffs"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout Form
+
+@if (_contract != null)
+{
+    
+}
+
+@code
+{
+    [Parameter]
+    public int Id {get; set; } 
+    Contract _contract;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _contract = await Context.Contract.FirstOrDefaultAsync(contract => contract.Id == Id);
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
