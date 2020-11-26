@@ -1,0 +1,36 @@
+﻿@page "/tariff-groups/create"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.VisualBasic.CompilerServices
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+
+<h3>Create</h3>
+<div class="d-flex justify-content-center">
+    <EditForm OnSubmit="@CreateTariffGroup" Model="@TariffGroup" class="form-group d-flex flex-column col-sm-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label>
+            Title
+            <InputText @bind-Value="TariffGroup.Title" class="form-control" />
+        </label>
+        <input type="submit" class="form-control" />
+    </EditForm>
+</div>
+
+
+
+@code {
+    readonly TariffGroup TariffGroup = new TariffGroup();
+    
+    async Task CreateTariffGroup(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+        await Context.AddAsync(TariffGroup);
+        await Context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/tariff-groups/");
+    }
+}

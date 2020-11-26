@@ -1,59 +1,85 @@
 ﻿@page "/contracts/create"
 @using Billing52Group.Configuration
 @using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.VisualBasic.CompilerServices
 @inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
 @attribute [Authorize]
 
-<h3>Create</h3>
-<div class="d-flex justify-content-center">
-    <EditForm OnSubmit="@CreateContract" Model="@Contract" class="form-group d-flex flex-column col-sm-3">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+@if (_contractGroups != null)
+{
+    <h3>Create</h3>
+    <div class="d-flex justify-content-center">
+        <EditForm OnSubmit="@CreateContract" Model="@Contract" class="form-group d-flex flex-column col-sm-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <label>
-            Title
-            <InputText @bind-Value="Contract.Title" class="form-control" />
-        </label>
+            <label>
+                Title
+                <InputText @bind-Value="Contract.Title" class="form-control" />
+            </label>
 
-        <label>
-            Comment
-            <InputText @bind-Value="Contract.Comment" class="form-control" />
-        </label>
+            <label>
+                Comment
+                <InputText @bind-Value="Contract.Comment" class="form-control" />
+            </label>
 
-        <label>
-            Date1
-            <InputDate @bind-Value="Contract.Date1" class="form-control" />
-        </label>
+            <label>
+                Date1
+                <InputDate @bind-Value="Contract.Date1" class="form-control" />
+            </label>
 
-        <label>
-            Date2
-            <InputDate @bind-Value="Contract.Date2" class="form-control" />
-        </label>
+            <label>
+                Date2
+                <InputDate @bind-Value="Contract.Date2" class="form-control" />
+            </label>
 
-        <label>
-            Fc
-            <InputNumber @bind-Value="Contract.Fc" class="form-control" />
-        </label>
+            <label>
+                Type of face
+                <InputSelect @bind-Value="selectedTypeOfFace" class="form-control">
+                    <option value="0">Физическое</option>
+                    <option value="1">Юридическое</option>
+                </InputSelect>
+            </label>
 
-        <label>
-            Contract group id
-            <InputNumber @bind-Value="Contract.ContractGroupId" class="form-control" />
-        </label>
+            <label for="selectedContractGroupId">
+                Contract group id
+                <InputSelect id="selectedContractGroupId" @bind-Value="selectedContractGroupId" class="form-control">
+                    @foreach (var contractGroup in _contractGroups)
+                    {
+                        <option value="@contractGroup.Id">@contractGroup.Title</option>
+                    }
+                </InputSelect>
+            </label>
 
-        <input type="submit" class="form-control" />
+            <input type="submit" class="form-control" />
 
-    </EditForm>
-</div>
+        </EditForm>
+    </div>
+}
+
 
 @code {
 
+    public string selectedContractGroupId;
+    private string selectedTypeOfFace;
     readonly Contract Contract = new Contract{ Date1 = DateTime.UtcNow, Date2 = DateTime.UtcNow };
-
+    private IEnumerable<ContractGroup> _contractGroups; 
+    
     async Task CreateContract(EditContext editContext)
     {
         if (!editContext.Validate()) return;
+        Contract.Fc = selectedTypeOfFace == null ? 0 : int.Parse(selectedTypeOfFace);
+        Contract.ContractGroupId = selectedContractGroupId==null? 1 : int.Parse(selectedContractGroupId);
         await Context.AddAsync(Contract);
         await Context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/contracts/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _contractGroups = await Context.ContractGroup.ToListAsync();
     }
 
 }

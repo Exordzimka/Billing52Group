@@ -1,0 +1,85 @@
+﻿@page "/contracts/{ContractId:int}/tariffs/add"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Accounting
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+@if (TariffPlans != null)
+{
+    <h3>Create</h3>
+    <div class="d-flex justify-content-center">
+        <EditForm OnSubmit="@AddService" Model="@ContractTariff" class="form-group d-flex flex-column col-sm-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>
+                Date1
+                <InputDate @bind-Value="ContractTariff.Date1" class="form-control" />
+            </label>
+            <label>
+                Date2
+                <InputDate @bind-Value="ContractTariff.Date2" class="form-control" />
+            </label>
+            <label>
+                Comment
+                <InputText @bind-Value="ContractTariff.Comment" class="form-control" />
+            </label>
+            <label>
+                Tariff plan
+                <InputSelect id="selectedActivationTypeId" @bind-Value="tariffId" class="form-control">
+                    @foreach (var tariff in TariffPlans)
+                    {
+                        <option value="@tariff.Id">@tariff.Title</option>
+                    }
+                </InputSelect>
+            </label>
+            <input type="submit" class="form-control" />
+        </EditForm>
+    </div>
+}
+
+
+
+
+@code 
+{
+    [Parameter]
+    public int ContractId { get; set; }
+
+    private string tariffId;
+    IEnumerable<TariffPlan> TariffPlans;
+    IEnumerable<TariffPlan> _tariffPlansOnContract;
+    IEnumerable<ContractTariff> _contractTariffs;
+    ContractTariff ContractTariff = new ContractTariff{ Date1 = DateTime.UtcNow, Date2 = DateTime.UtcNow };
+    List<int> tariffsOnContractId = new List<int>();
+    protected override async Task OnInitializedAsync()
+    {
+        _contractTariffs = await Context.ContractTariff.Where(service => service.ContractId == ContractId).ToListAsync();
+        tariffsOnContractId.AddRange(_contractTariffs.Select(tariff => tariff.TariffPlanId));
+        _tariffPlansOnContract = await Context.TariffPlan.Where(tariff => tariffsOnContractId.Contains(tariff.Id)).ToListAsync();
+        TariffPlans = await Context.TariffPlan.Where(tariff => _tariffPlansOnContract.Contains(tariff) == false).ToListAsync();
+        if (TariffPlans != null && TariffPlans.Count() > 0)
+        {
+            tariffId = TariffPlans.ElementAt(0).Id.ToString();
+        }
+    }
+
+    async Task AddService(EditContext editContext)
+    {
+        if (!editContext.Validate() ) return;
+        if (tariffId != null && int.TryParse(tariffId, out _))
+        {
+            ContractTariff.ContractId = ContractId;
+            ContractTariff.TariffPlanId = int.Parse(tariffId);
+            await Context.AddAsync(ContractTariff);
+            await Context.SaveChangesAsync();
+            await BalanceUpdater.UpdateBalance(ContractId);
+            NavigationManager.NavigateTo($"/contracts/{ContractId}/tariffs");
+        }
+       
+    }
+}
+
+

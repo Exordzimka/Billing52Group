@@ -1,0 +1,53 @@
+﻿@page "/contracts/{ContractId:int}/modules"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+
+
+@if (_contractModules != null)
+{
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Modules</h1>
+    <div align="right">
+        <a class="btn btn-primary " href="/contracts/@ContractId/modules/add">Add</a>    
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr align="center">
+            <th>
+                Module
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractModule in _contractModules)
+        {
+            <tr>
+                <td>
+                    @contractModule.Module.Title
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    IEnumerable<ContractModule> _contractModules;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractModules = await Context.ContractModule.Where(contratModule => contratModule.ContractId == ContractId).ToListAsync();
+        foreach (var contractModule in _contractModules)
+        {
+            contractModule.Module = Context.Module.FirstOrDefault(module => module.Id == contractModule.Moduleid);
+        }
+    }
+}

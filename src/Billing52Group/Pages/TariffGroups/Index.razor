@@ -1,0 +1,63 @@
+﻿@page "/tariff-groups"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout MainLayout
+<h3>
+    Groups Of Tariffs
+</h3>
+
+<div class="row justify-content-end px-3">
+    <NavLink class="text-white" href="/tariff-groups/create">
+        <span class="btn btn-primary" >
+            Create
+        </span>
+    </NavLink>
+</div>
+
+@if (tariffGroups == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr class="table-">
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+        @foreach (var tariffGroup in tariffGroups)
+        {
+            <tr>
+                <td>
+                    @tariffGroup.Id
+                </td>
+                <td>
+                    @tariffGroup.Title
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<TariffGroup> tariffGroups;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tariffGroups = await Context.TariffGroup.ToListAsync();
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/contracts/{ContractId:int}/charges/add"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Accounting
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+
+<h3>Create</h3>
+<div class="d-flex justify-content-center">
+    <EditForm OnSubmit="@AddPayment" Model="@ContractCharge" class="form-group d-flex flex-column col-sm-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label>
+            Sum
+            <InputNumber @bind-Value="ContractCharge.Summa" class="form-control" />
+        </label>
+
+        <label>
+            Comment
+            <InputText @bind-Value="ContractCharge.Comment" class="form-control" />
+        </label>
+
+        <label>
+            Date
+            <InputDate @bind-Value="ContractCharge.Date" class="form-control" />
+        </label>
+        <input type="submit" class="form-control" />
+    </EditForm>
+</div>
+
+
+
+@code 
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    readonly ContractCharge ContractCharge = new ContractCharge{ Date = DateTime.UtcNow};
+    
+    async Task AddPayment(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+        ContractCharge.ContractId = ContractId;
+        await Context.AddAsync(ContractCharge);
+        await Context.SaveChangesAsync();
+        await BalanceUpdater.UpdateBalance(ContractId);
+        NavigationManager.NavigateTo($"/contracts/{ContractId}/charges");
+    }
+}
+

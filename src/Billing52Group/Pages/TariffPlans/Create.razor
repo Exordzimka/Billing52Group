@@ -1,0 +1,79 @@
+﻿@page "/tariff-plans/create"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+@if (_activationTypes != null && _tariffGroups != null)
+{
+    <h3>Create</h3>
+    <div class="d-flex justify-content-center">
+        <EditForm OnSubmit="@CreateService" Model="@Service" class="form-group d-flex flex-column col-sm-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>
+                Title
+                <InputText @bind-Value="Service.Title" class="form-control" />
+            </label>
+            <label>
+                Comment
+                <InputText @bind-Value="Service.Comment" class="form-control" />
+            </label>
+            <label>
+                Cost
+                <InputNumber @bind-Value="Service.Cost" class="form-control" />
+            </label>
+            <label for="selectedModuleId">
+                Contract group id
+                <InputSelect id="selectedModuleId" @bind-Value="selectedTariffGroupId" class="form-control">
+                    @foreach (var tariffGroup in _tariffGroups)
+                    {
+                        <option value="@tariffGroup.Id">@tariffGroup.Title</option>
+                    }
+                </InputSelect>
+            </label>
+            <label for="selectedActivationTypeId">
+                Contract group id
+                <InputSelect id="selectedActivationTypeId" @bind-Value="selectedActivationTypeId" class="form-control">
+                    @foreach (var activationType in _activationTypes)
+                    {
+                        <option value="@activationType.Id">@activationType.Title</option>
+                    }
+                </InputSelect>
+            </label>
+
+            <input type="submit" class="form-control" />
+
+        </EditForm>
+    </div>
+}
+
+
+@code {
+
+    private string selectedTariffGroupId;
+    private string selectedActivationTypeId;
+    readonly Service Service = new Service();
+    private IEnumerable<TariffGroup> _tariffGroups;
+    private IEnumerable<ActivationType> _activationTypes;
+    
+    async Task CreateService(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+        Service.Moduleid = selectedTariffGroupId == null ? 1 : int.Parse(selectedTariffGroupId);
+        Service.ActivationTypeId = selectedActivationTypeId==null? 1 : int.Parse(selectedActivationTypeId);
+        await Context.AddAsync(Service);
+        await Context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/tariff-plans/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _tariffGroups = await Context.TariffGroup.ToListAsync();
+        _activationTypes = await Context.ActivationType.ToListAsync();
+    }
+
+}

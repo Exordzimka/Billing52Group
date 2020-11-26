@@ -1,0 +1,96 @@
+﻿@page "/contracts/{ContractId:int}/tariffs"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+
+
+@if (_contractTariffs != null)
+{
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Tariffs</h1>
+    <div align="right">
+        <a class="btn btn-primary " href="/contracts/@ContractId/tariffs/add">Add</a>    
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr align="center">
+            <th>
+                Title
+            </th>
+            <th>
+                Cost
+            </th>
+            <th>
+                Date of start
+            </th>
+            <th>
+                Date of end
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                Type of activation
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractTariff in _contractTariffs)
+        {
+            <tr>
+                <td>
+                    @contractTariff.TariffPlan.Title
+                </td>
+                <td>
+                    @contractTariff.TariffPlan.Cost
+                </td>
+                <td>
+                    @contractTariff.Date1
+                </td>
+                <td>
+                    @contractTariff.Date2
+                </td>
+                <td contenteditable="true">
+                    <input value="@contractTariff.Comment"
+                           @onchange="@(e => { ChangeComment(contractTariff.Id, e.Value.ToString()); })" />
+                </td>
+                <td>
+                    @contractTariff.TariffPlan.ActivationType.Title
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    IEnumerable<ContractTariff> _contractTariffs;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractTariffs = await Context.ContractTariff.Where(contractTariff => contractTariff.ContractId == ContractId).ToListAsync();
+        foreach (var contractTariff in _contractTariffs)
+        {
+            contractTariff.TariffPlan = Context.TariffPlan.FirstOrDefault(plan => plan.Id == contractTariff.TariffPlanId);
+            contractTariff.TariffPlan.ActivationType = Context.ActivationType.FirstOrDefault(type => type.Id == contractTariff.TariffPlan.ActivationTypeId);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ChangeComment(int contractPaymentId,string changedComment)
+    {
+        Context.ContractPayment.FirstOrDefault(contractPayment => contractPayment.Id == contractPaymentId).Comment = changedComment;
+        Context.SaveChangesAsync();
+    }
+}

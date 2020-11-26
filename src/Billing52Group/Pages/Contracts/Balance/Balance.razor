@@ -1,41 +1,43 @@
-﻿@page "/contracts/{Id:int}/payments"
+﻿@page "/contracts/{ContractId:int}/balance"
 @using Microsoft.EntityFrameworkCore
 @using Billing52Group.Configuration
 @using Billing52Group.Models
 @inject ApplicationDbContext Context
 @attribute [Authorize]
-@layout Form
 @inject IJSRuntime JsRuntime
 
-@if (_contractPayments != null)
+
+@if (_contractBalances != null)
 {
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Balances</h1>
     <table class="table table-striped table-bordered table-hover">
         <thead>
-        <tr>
+        <tr align="center">
             <th>
-                Id
+                Year
             </th>
             <th>
-                Sum
+                Month
             </th>
             <th>
-                Comment
+                Summa
             </th>
         </tr>
         </thead>
 
         <tbody>
-        @foreach (var contractPayment in _contractPayments)
+        @foreach (var contractBalance in _contractBalances)
         {
             <tr>
                 <td>
-                    @contractPayment.Id
+                    @contractBalance.Yy
                 </td>
                 <td>
-                    @contractPayment.Summa
+                    @contractBalance.Mm
                 </td>
-                <td contenteditable="true">
-                    @contractPayment.Comment
+                <td>
+                    @contractBalance.Summa
                 </td>
             </tr>
         }
@@ -46,22 +48,16 @@
 @code
 {
     [Parameter]
-    public int Id { get; set; }
+    public int ContractId { get; set; }
     
-    IEnumerable<ContractPayment> _contractPayments;
+    IEnumerable<ContractBalance> _contractBalances;
     protected override async Task OnInitializedAsync()
     {
-        _contractPayments = await Context.ContractPayment.Where(payment => payment.ContractId == Id).ToListAsync();
+        _contractBalances = await Context.ContractBalance.Where(contractBalance => contractBalance.ContractId == ContractId).ToListAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
     }
-
-    private void ChangeComment(int contractPaymentId,string changedComment)
-    {
-        Context.ContractPayment.FirstOrDefault(contractPayment => contractPayment.Id == contractPaymentId).Comment = changedComment;
-    }
-    
 }

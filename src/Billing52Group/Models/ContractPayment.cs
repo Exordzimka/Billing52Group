@@ -1,4 +1,6 @@
-﻿namespace Billing52Group.Models
+﻿using System;
+
+namespace Billing52Group.Models
 {
     public class ContractPayment
     {
@@ -14,6 +16,8 @@
 
         public virtual Contract Contract { get; set; }
 
-        public virtual Payment Payment { get; set; }
+        public virtual PaymentType PaymentType { get; set; }
+        
+        public DateTime? Date { get; set; }
     }
 }

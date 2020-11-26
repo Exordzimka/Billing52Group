@@ -4,7 +4,7 @@
     {
         public int Yy { get; set; }
 
-        public bool Mm { get; set; }
+        public int Mm { get; set; }
 
         public double Summa { get; set; }
 

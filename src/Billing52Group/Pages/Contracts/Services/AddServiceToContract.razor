@@ -1,0 +1,90 @@
+﻿@page "/contracts/{ContractId:int}/services/add"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Accounting
+@using Microsoft.Extensions.Localization.Internal
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+@if (Services != null)
+{
+    <h3>Create</h3>
+    <div class="d-flex justify-content-center">
+        <EditForm OnSubmit="@AddService" Model="@Contractservice" class="form-group d-flex flex-column col-sm-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>
+                Date1
+                <InputDate @bind-Value="Contractservice.Date1" class="form-control" />
+            </label>
+            <label>
+                Date2
+                <InputDate @bind-Value="Contractservice.Date2" class="form-control" />
+            </label>
+            <label>
+                Comment
+                <InputText @bind-Value="Contractservice.Comment" class="form-control" />
+            </label>
+            <label>
+                Service
+                <InputSelect id="selectedActivationTypeId" @bind-Value="serviceId" class="form-control">
+                    @foreach (var service in Services)
+                    {
+                        <option value="@service.Id">@service.Title</option>
+                    }
+                </InputSelect>
+            </label>
+            <input type="submit" class="form-control" />
+        </EditForm>
+    </div>
+}
+
+
+
+
+@code 
+{
+    [Parameter]
+    public int ContractId { get; set; }
+
+    private string serviceId;
+    IEnumerable<Service> Services;
+    IEnumerable<Service> _servicesOnContract;
+    IEnumerable<ContractService> _contractServices;
+    IEnumerable<ContractModule> _contractModules;
+    ContractService Contractservice = new ContractService{ Date1 = DateTime.UtcNow, Date2 = DateTime.UtcNow };
+    List<int> servicesOnContractId = new List<int>();
+    protected override async Task OnInitializedAsync()
+    {
+        _contractModules = await Context.ContractModule.Where(module => module.ContractId == ContractId).ToListAsync();
+        _contractServices = await Context.ContractService.Where(service => service.ContractId == ContractId).ToListAsync();
+        servicesOnContractId.AddRange(_contractServices.Select(service => service.ServiceId));
+        _servicesOnContract = await Context.Service.Where(service => servicesOnContractId.Contains(service.Id)).ToListAsync();
+        Services = await Context.Service.Where(service => _servicesOnContract.Contains(service) == false && 
+                                                          _contractModules.Select(module => module.Moduleid)
+                                                              .Contains(service.Moduleid)).ToListAsync();
+        if (Services != null && Services.Count() > 0)
+        {
+            serviceId = Services.ElementAt(0).Id.ToString();
+        }
+    }
+
+    async Task AddService(EditContext editContext)
+    {
+        if (!editContext.Validate() ) return;
+        if (serviceId != null && int.TryParse(serviceId, out _))
+        {
+            Contractservice.ContractId = ContractId;
+            Contractservice.ServiceId = int.Parse(serviceId);
+            await Context.AddAsync(Contractservice);
+            await Context.SaveChangesAsync();
+            await BalanceUpdater.UpdateBalance(ContractId);
+            NavigationManager.NavigateTo($"/contracts/{ContractId}/services");
+        }
+       
+    }
+}
+
+

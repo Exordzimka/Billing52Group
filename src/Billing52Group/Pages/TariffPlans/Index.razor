@@ -1,0 +1,85 @@
+﻿@page "/tariff-plans"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@layout MainLayout
+<h3>
+    Tariff Plans
+</h3>
+
+<div class="row justify-content-end px-3">
+    <NavLink class="text-white" href="/tariff-plans/create">
+        <span class="btn btn-primary" >
+            Create
+        </span>
+    </NavLink>
+</div>
+
+@if (tariffPlans == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr class="table-">
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Cost
+            </th>
+            <th>
+                Group
+            </th>
+            <th>
+                Activation type
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+        @foreach (var tariffPlan in tariffPlans)
+        {
+            <tr>
+                <td>
+                    @tariffPlan.Id
+                </td>
+                <td>
+                    @tariffPlan.Title
+                </td>
+                <td>
+                    @tariffPlan.Cost
+                </td>
+                <td>
+                    @tariffPlan.TariffGroup.Title
+                </td>
+                <td>
+                    @tariffPlan.ActivationType.Title
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    IEnumerable<TariffPlan> tariffPlans;
+    protected override async Task OnInitializedAsync()
+    {
+        tariffPlans = await Context.TariffPlan.ToListAsync();
+        foreach (var tariffPlan in tariffPlans)
+        {
+            tariffPlan.TariffGroup = Context.TariffGroup.FirstOrDefault(group => group.Id == tariffPlan.TariffGroupId);
+            tariffPlan.ActivationType = Context.ActivationType.FirstOrDefault(type => type.Id == tariffPlan.ActivationTypeId);
+        }
+    }
+}

@@ -1,0 +1,80 @@
+﻿@page "/services/create"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.VisualBasic.CompilerServices
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+@if (_activationTypes != null && _modules != null)
+{
+    <h3>Create</h3>
+    <div class="d-flex justify-content-center">
+        <EditForm OnSubmit="@CreateService" Model="@Service" class="form-group d-flex flex-column col-sm-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>
+                Title
+                <InputText @bind-Value="Service.Title" class="form-control" />
+            </label>
+            <label>
+                Comment
+                <InputText @bind-Value="Service.Comment" class="form-control" />
+            </label>
+            <label>
+                Cost
+                <InputNumber @bind-Value="Service.Cost" class="form-control" />
+            </label>
+            <label for="selectedModuleId">
+                Contract group id
+                <InputSelect id="selectedModuleId" @bind-Value="selectedModuleId" class="form-control">
+                    @foreach (var module in _modules)
+                    {
+                        <option value="@module.Id">@module.Title</option>
+                    }
+                </InputSelect>
+            </label>
+            <label for="selectedActivationTypeId">
+                Contract group id
+                <InputSelect id="selectedActivationTypeId" @bind-Value="selectedActivationTypeId" class="form-control">
+                    @foreach (var activationType in _activationTypes)
+                    {
+                        <option value="@activationType.Id">@activationType.Title</option>
+                    }
+                </InputSelect>
+            </label>
+
+            <input type="submit" class="form-control" />
+
+        </EditForm>
+    </div>
+}
+
+
+@code {
+
+    private string selectedModuleId;
+    private string selectedActivationTypeId;
+    readonly Service Service = new Service();
+    private IEnumerable<Module> _modules;
+    private IEnumerable<ActivationType> _activationTypes;
+    
+    async Task CreateService(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+        Service.Moduleid = selectedModuleId == null ? 1 : int.Parse(selectedModuleId);
+        Service.ActivationTypeId = selectedActivationTypeId==null? 1 : int.Parse(selectedActivationTypeId);
+        await Context.AddAsync(Service);
+        await Context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/services/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _modules = await Context.Module.ToListAsync();
+        _activationTypes = await Context.ActivationType.ToListAsync();
+    }
+
+}

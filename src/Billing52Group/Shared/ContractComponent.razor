@@ -1,0 +1,73 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using System.ComponentModel.DataAnnotations
+@inject ApplicationDbContext Context
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+
+@if (Contract != null)
+{
+    <h1 style="float: left; width: 50%;">@TitleOfPage</h1>
+    <h1 align="right">@BalanceOfContract</h1>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light text-black-50">
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/parameters">Parameters</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/modules">Modules</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/services">Services</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/payments">Payments</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/charges">Charges</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/tariffs">Tariffs</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/balance">Balance</a>
+                </li>
+                <li class="nav-item font-weight-bold">
+                    <a class="nav-link" href="/contracts/@Id/account">Account</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    @Body
+}
+
+@code
+{
+    [Parameter]
+    [Required]
+    public int Id { get; set; }
+
+    Contract Contract{ get; set; }
+    public ContractBalance ContractBalance { get; set; }
+    public string TitleOfPage{ get; set; }
+    public string BalanceOfContract { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Contract ??= await Context.Contract.FirstOrDefaultAsync(contract => contract.Id == Id);
+        ContractBalance = await Context.ContractBalance.FirstOrDefaultAsync(contractBalance => contractBalance.Contract.Id == Contract.Id);
+        TitleOfPage = Contract.Id + " " + Contract.Title;
+        BalanceOfContract = ContractBalance==null?"Balance 0.00":"Balance "+Math.Round(ContractBalance.Summa,2)+" RUB";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        await JsRuntime.InvokeVoidAsync("setTitle", TitleOfPage);
+    }
+}

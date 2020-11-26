@@ -15,6 +15,10 @@ namespace Billing52Group.Models
         public int Moduleid { get; set; }
 
         public virtual Module Module { get; set; }
+        
+        public int? ActivationTypeId { get; set; }
+        
+        public virtual ActivationType ActivationType { get; set; }
 
         public virtual ICollection<ContractService> ContractService { get; set; } = new HashSet<ContractService>();
     }

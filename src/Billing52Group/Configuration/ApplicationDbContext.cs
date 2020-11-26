@@ -13,6 +13,7 @@ namespace Billing52Group.Configuration
         {
         }
 
+        public virtual DbSet<ActivationType> ActivationType { get; set; }
         public virtual DbSet<Contract> Contract { get; set; }
 
         public virtual DbSet<ContractAccount> ContractAccount { get; set; }
@@ -43,7 +44,7 @@ namespace Billing52Group.Configuration
 
         public virtual DbSet<Parameters> Parameters { get; set; }
 
-        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<PaymentType> PaymentType { get; set; }
 
 
         public virtual DbSet<Service> Service { get; set; }
@@ -59,6 +60,19 @@ namespace Billing52Group.Configuration
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ActivationType>(entity =>
+            {
+                entity.ToTable("ActivationType");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+                
+                entity.Property(e => e.Title)
+                    .HasColumnName("title")
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("latin1")
+                    .HasCollation("latin1_swedish_ci");
+            });
 
             modelBuilder.Entity<Contract>(entity =>
             {
@@ -330,7 +344,7 @@ namespace Billing52Group.Configuration
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKcontract4");
 
-                entity.HasOne(d => d.Payment)
+                entity.HasOne(d => d.PaymentType)
                     .WithMany(p => p.ContractPayment)
                     .HasForeignKey(d => d.PaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -506,15 +520,11 @@ namespace Billing52Group.Configuration
                     .HasCollation("latin1_swedish_ci");
             });
 
-            modelBuilder.Entity<Payment>(entity =>
+            modelBuilder.Entity<PaymentType>(entity =>
             {
                 entity.ToTable("payment");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Date)
-                    .HasColumnName("date")
-                    .HasColumnType("date");
 
                 entity.Property(e => e.Title)
                     .HasColumnName("title")
@@ -554,6 +564,11 @@ namespace Billing52Group.Configuration
                     .HasForeignKey(d => d.Moduleid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKmodule3");
+                
+                entity.HasOne(d => d.ActivationType)
+                    .WithMany(p => p.Service)
+                    .HasForeignKey(d => d.ActivationTypeId)
+                    .HasConstraintName("FKactivation2");
             });
 
             modelBuilder.Entity<Status>(entity =>
@@ -604,6 +619,10 @@ namespace Billing52Group.Configuration
                     .HasColumnName("tariffgroupid")
                     .HasDefaultValueSql("'0'");
 
+                entity.Property(e => e.ActivationTypeId)
+                    .HasColumnName("activationtypeid")
+                    .HasDefaultValueSql("'0'");
+
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title")
@@ -615,6 +634,11 @@ namespace Billing52Group.Configuration
                     .WithMany(p => p.TariffPlan)
                     .HasForeignKey(d => d.TariffGroupId)
                     .HasConstraintName("FKmodule1");
+
+                entity.HasOne(d => d.ActivationType)
+                    .WithMany(p => p.TariffPlan)
+                    .HasForeignKey(d => d.ActivationTypeId)
+                    .HasConstraintName("FKactivation1");
             });
 
             modelBuilder.Entity<User>(entity =>

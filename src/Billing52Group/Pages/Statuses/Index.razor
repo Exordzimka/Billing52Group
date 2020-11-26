@@ -9,20 +9,10 @@
     Statuses
 </h3>
 
-<div class="row justify-content-end">
-    <NavLink class="text-white" href="/contractGroup/create">
+<div class="row justify-content-end px-3">
+    <NavLink class="text-white" href="/statuses/create">
         <span class="btn btn-primary" >
             Create
-        </span>
-    </NavLink>
-    <NavLink class="text-white" href="/contractGroup/edit">
-        <span class="btn btn-primary" >
-            Edit
-        </span>
-    </NavLink>
-    <NavLink class="text-white" href="/contractGroup/delete">
-        <span class="btn btn-primary" >
-            Delete
         </span>
     </NavLink>
 </div>
@@ -49,9 +39,10 @@ else
         </thead>
 
         <tbody>
-        <tr>
-            @foreach (var statuse in statuses)
-            {
+        
+        @foreach (var statuse in statuses)
+        {
+            <tr>
                 <td>
                     @statuse.Id
                 </td>
@@ -61,8 +52,8 @@ else
                 <td>
                     @statuse.Comment
                 </td>
-            }
-        </tr>
+            </tr>
+        }
         </tbody>
     </table>
 }

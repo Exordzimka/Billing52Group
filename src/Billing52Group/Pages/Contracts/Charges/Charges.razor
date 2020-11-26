@@ -1,0 +1,79 @@
+﻿@page "/contracts/{ContractId:int}/charges"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+
+
+@if (_contractCharges != null)
+{
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Charges</h1>
+    <div align="right">
+        <a class="btn btn-primary " href="/contracts/@ContractId/charges/add">Add</a>    
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr align="center">
+            <th>
+                Id
+            </th>
+            <th>
+                Sum
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Comment
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractCharge in _contractCharges)
+        {
+            <tr>
+                <td>
+                    @contractCharge.Id
+                </td>
+                <td>
+                    @contractCharge.Summa
+                </td>
+                <td>
+                    @contractCharge.Date
+                </td>
+                <td contenteditable="true">
+                    <input value="@contractCharge.Comment"
+                           @onchange="@(e => { ChangeComment(contractCharge.Id, e.Value.ToString()); })" />
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    IEnumerable<ContractCharge> _contractCharges;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractCharges = await Context.ContractCharge.Where(charge => charge.ContractId == ContractId).ToListAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ChangeComment(int contractChargeId,string changedComment)
+    {
+        Context.ContractCharge.FirstOrDefault(contracteCharge => contracteCharge.Id == contractChargeId).Comment = changedComment;
+        Context.SaveChangesAsync();
+    }
+}

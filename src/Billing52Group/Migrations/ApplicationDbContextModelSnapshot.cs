@@ -17,6 +17,24 @@ namespace Billing52Group.Migrations
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Billing52Group.Models.ActivationType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnName("title")
+                        .HasColumnType("varchar(100)")
+                        .HasAnnotation("MySql:CharSet", "latin1")
+                        .HasAnnotation("MySql:Collation", "latin1_swedish_ci");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivationType");
+                });
+
             modelBuilder.Entity("Billing52Group.Models.Contract", b =>
                 {
                     b.Property<int>("Id")
@@ -66,9 +84,9 @@ namespace Billing52Group.Migrations
                         .HasColumnName("yy")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Mm")
+                    b.Property<int>("Mm")
                         .HasColumnName("mm")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("int");
 
                     b.Property<int>("ContractId")
                         .HasColumnName("contractid")
@@ -94,9 +112,9 @@ namespace Billing52Group.Migrations
                         .HasColumnName("yy")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Mm")
+                    b.Property<int>("Mm")
                         .HasColumnName("mm")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("int");
 
                     b.Property<int>("ContractId")
                         .HasColumnName("contractid")
@@ -272,6 +290,9 @@ namespace Billing52Group.Migrations
                     b.Property<int>("ContractId")
                         .HasColumnName("contractid")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("PaymentId")
                         .HasColumnName("paymentid")
@@ -463,16 +484,12 @@ namespace Billing52Group.Migrations
                     b.ToTable("parameters");
                 });
 
-            modelBuilder.Entity("Billing52Group.Models.Payment", b =>
+            modelBuilder.Entity("Billing52Group.Models.PaymentType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnName("date")
-                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .HasColumnName("title")
@@ -490,6 +507,9 @@ namespace Billing52Group.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ActivationTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -514,6 +534,8 @@ namespace Billing52Group.Migrations
                         .HasAnnotation("MySql:Collation", "latin1_swedish_ci");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivationTypeId");
 
                     b.HasIndex("Moduleid")
                         .HasName("FKmodule3_idx");
@@ -570,6 +592,12 @@ namespace Billing52Group.Migrations
                         .HasColumnName("id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ActivationTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("activationtypeid")
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("'0'");
+
                     b.Property<double?>("Cost")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("cost")
@@ -590,6 +618,8 @@ namespace Billing52Group.Migrations
                         .HasAnnotation("MySql:Collation", "latin1_swedish_ci");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivationTypeId");
 
                     b.HasIndex("TariffGroupId")
                         .HasName("FKmodule1_idx");
@@ -904,7 +934,7 @@ namespace Billing52Group.Migrations
                         .HasConstraintName("FKcontract4")
                         .IsRequired();
 
-                    b.HasOne("Billing52Group.Models.Payment", "Payment")
+                    b.HasOne("Billing52Group.Models.PaymentType", "PaymentType")
                         .WithMany("ContractPayment")
                         .HasForeignKey("PaymentId")
                         .HasConstraintName("FKpayment1")
@@ -958,6 +988,11 @@ namespace Billing52Group.Migrations
 
             modelBuilder.Entity("Billing52Group.Models.Service", b =>
                 {
+                    b.HasOne("Billing52Group.Models.ActivationType", "ActivationType")
+                        .WithMany("Service")
+                        .HasForeignKey("ActivationTypeId")
+                        .HasConstraintName("FKactivation2");
+
                     b.HasOne("Billing52Group.Models.Module", "Module")
                         .WithMany("Service")
                         .HasForeignKey("Moduleid")
@@ -967,6 +1002,11 @@ namespace Billing52Group.Migrations
 
             modelBuilder.Entity("Billing52Group.Models.TariffPlan", b =>
                 {
+                    b.HasOne("Billing52Group.Models.ActivationType", "ActivationType")
+                        .WithMany("TariffPlan")
+                        .HasForeignKey("ActivationTypeId")
+                        .HasConstraintName("FKactivation1");
+
                     b.HasOne("Billing52Group.Models.TariffGroup", "TariffGroup")
                         .WithMany("TariffPlan")
                         .HasForeignKey("TariffGroupId")

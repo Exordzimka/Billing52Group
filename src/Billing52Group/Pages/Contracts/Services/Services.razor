@@ -1,0 +1,96 @@
+﻿@page "/contracts/{ContractId:int}/services"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+
+
+@if (_contractServices != null)
+{
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Services</h1>
+    <div align="right">
+        <a class="btn btn-primary " href="/contracts/@ContractId/services/add">Add</a>    
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr align="center">
+            <th>
+                Title
+            </th>
+            <th>
+                Cost
+            </th>
+            <th>
+                Date1
+            </th>
+            <th>
+                Date2
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                Type of activation
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractService in _contractServices)
+        {
+            <tr>
+                <td>
+                    @contractService.Service.Title
+                </td>
+                <td>
+                    @contractService.Service.Cost
+                </td>
+                <td>
+                    @contractService.Date1
+                </td>
+                <td>
+                    @contractService.Date2
+                </td>
+                <td contenteditable="true">
+                    <input value="@contractService.Comment"
+                           @onchange="@(e => { ChangeComment(contractService.Id, e.Value.ToString()); })" />
+                </td>
+                <td>
+                    @contractService.Service.ActivationType.Title
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    IEnumerable<ContractService> _contractServices;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractServices = await Context.ContractService.Where(service => service.ContractId == ContractId).ToListAsync();
+        foreach (var contractService in _contractServices)
+        {
+            contractService.Service = Context.Service.FirstOrDefault(service => service.Id == contractService.ServiceId);
+            contractService.Service.ActivationType = Context.ActivationType.FirstOrDefault(type => type.Id == contractService.Service.ActivationTypeId);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ChangeComment(int contractPaymentId,string changedComment)
+    {
+        Context.ContractPayment.FirstOrDefault(contractPayment => contractPayment.Id == contractPaymentId).Comment = changedComment;
+        Context.SaveChangesAsync();
+    }
+}

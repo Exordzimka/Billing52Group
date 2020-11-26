@@ -1,0 +1,71 @@
+﻿@page "/contracts/{ContractId:int}/parameters"
+@using Microsoft.EntityFrameworkCore
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@inject ApplicationDbContext Context
+@attribute [Authorize]
+@inject IJSRuntime JsRuntime
+
+
+@if (_contractParameters != null)
+{
+    <ContractComponent Id="@ContractId"></ContractComponent>
+    <h1 align="center">Parameters</h1>
+    <div align="right">
+        <a class="btn btn-primary " href="/contracts/@ContractId/parameters/add">Add</a>    
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr align="center">
+            <th>
+                Title
+            </th>
+            <th>
+                Value
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var contractParameter in _contractParameters)
+        {
+            <tr>
+                <td>
+                    @contractParameter.Param.Title
+                </td>
+                <td contenteditable="true">
+                    <input value="@contractParameter.Value"
+                           @onchange="@(e => { ChangeValue(contractParameter.Id, e.Value.ToString()); })" />
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    [Parameter]
+    public int ContractId { get; set; }
+    
+    IEnumerable<ContractParams> _contractParameters;
+    protected override async Task OnInitializedAsync()
+    {
+        _contractParameters = await Context.ContractParams.Where(parameter => parameter.ContractId == ContractId).ToListAsync();
+        foreach (var contractParameter in _contractParameters)
+        {
+            contractParameter.Param = Context.Parameters.FirstOrDefault(type => type.Id == contractParameter.ParamId);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ChangeValue(int contractParameterId,string changedValue)
+    {
+        Context.ContractParams.FirstOrDefault(contracteCharge => contracteCharge.Id == contractParameterId).Value = changedValue;
+        Context.SaveChangesAsync();
+    }
+}

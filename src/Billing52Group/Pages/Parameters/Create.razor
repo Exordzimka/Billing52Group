@@ -1,0 +1,36 @@
+﻿@page "/parameters/create"
+@using Billing52Group.Configuration
+@using Billing52Group.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.VisualBasic.CompilerServices
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+
+<h3>Create</h3>
+<div class="d-flex justify-content-center">
+    <EditForm OnSubmit="@CreateParameter" Model="@Parameter" class="form-group d-flex flex-column col-sm-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label>
+            Title
+            <InputText @bind-Value="Parameter.Title" class="form-control" />
+        </label>
+        <input type="submit" class="form-control" />
+    </EditForm>
+</div>
+
+
+
+@code {
+    readonly Parameters Parameter = new Parameters();
+    
+    async Task CreateParameter(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+        await Context.AddAsync(Parameter);
+        await Context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/parameters/");
+    }
+}
